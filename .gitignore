@@ -1,0 +1,32 @@
+
+# Backup entities generated with doctrine:generate:entities command
+**/Entity/*~
+composer.lock
+
+# Embedded web-server pid file
+/.web-server-pid
+
+/.idea/
+/.php_cs
+/.php_cs.cache
+
+.env
+###> symfony/framework-bundle ###
+/.env
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+###< phpunit/phpunit ###
+
+###> symfony/webpack-encore-pack ###
+/node_modules/
+
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-pack ###
+
+/Resources/public/build/dev

@@ -1,0 +1,59 @@
+{
+  "name": "milosa/social-media-aggregator-twitter-plugin",
+  "description": "Combine different social media types into a single feed",
+  "keywords": [
+    "social media",
+    "twitter"
+  ],
+  "minimum-stability": "stable",
+  "license": "MPL-2.0",
+  "type": "symfony-bundle",
+  "authors": [
+    {
+      "name": "Sander Haanstra",
+      "email": "sander3@gmail.com"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../social-media-aggregator"
+    }
+    ],
+  "require-dev": {
+    "phpunit/phpunit": "^7.4",
+    "matthiasnoback/symfony-dependency-injection-test": "^3.0",
+    "matthiasnoback/symfony-config-test": "^4.0",
+    "phpspec/prophecy": "~1.0",
+    "phpstan/phpstan": "^0.10.5"
+  },
+  "require":
+  {
+    "php": "^7.2",
+    "abraham/twitteroauth": "^0.7.4",
+    "milosa/social-media-aggregator-bundle": "dev-separating_fetchers",
+    "symfony/config": "^4.1",
+    "symfony/dependency-injection": "^4.1",
+    "symfony/http-kernel": "^4.1",
+    "symfony/cache": "^4.1"
+  },
+  "autoload" : {
+    "psr-4" : {
+      "Milosa\\SocialMediaAggregatorBundle\\Twitter\\" : "src/"
+    },
+    "exclude-from-classmap": [
+      "/tests/"
+    ]
+  },
+  "autoload-dev" : {
+    "psr-4" : {
+      "Milosa\\SocialMediaAggregatorTests\\Twitter\\": "tests/"
+    }
+  },
+  "scripts": {
+    "auto-scripts": {
+      "cache:clear": "symfony-cmd",
+      "assets:install %PUBLIC_DIR%": "symfony-cmd"
+    }
+  }
+}

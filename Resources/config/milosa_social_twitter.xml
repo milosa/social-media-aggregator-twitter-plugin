@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults autowire="true" autoconfigure="true" public="false" />
+
+        <service id="milosa_social_media_aggregator.fetcher.twitter" class="Milosa\SocialMediaAggregatorBundle\Twitter\TwitterFetcher">
+            <argument type="service" id="Abraham\TwitterOAuth\TwitterOAuth"/>
+            <argument>%milosa_social_media_aggregator.twitter_account%</argument>
+            <argument>%milosa_social_media_aggregator.twitter_numtweets%</argument>
+            <argument>%milosa_social_media_aggregator.twitter_image_size%</argument>
+            <tag name="milosa_social_media_aggregator.fetcher" />
+        </service>
+
+        <service id="milosa_social_media_aggregator.plugin.twitter" class="Milosa\SocialMediaAggregatorBundle\Twitter\TwitterPlugin" />
+
+        <service id="Abraham\TwitterOAuth\TwitterOAuth">
+            <argument>%milosa_social_media_aggregator.twitter_consumer_key%</argument>
+            <argument>%milosa_social_media_aggregator.twitter_consumer_secret%</argument>
+            <argument>%milosa_social_media_aggregator.twitter_oauth_token%</argument>
+            <argument>%milosa_social_media_aggregator.twitter_oauth_token_secret%</argument>
+        </service>
+
+        <service id="milosa_social_media_aggregator.handler.twitter" class="Milosa\SocialMediaAggregatorBundle\Aggregator\Handler">
+            <argument type="service" id="milosa_social_media_aggregator.fetcher.twitter" />
+            <argument type="string">Milosa\SocialMediaAggregatorBundle\Twitter\TwitterMessageFactory</argument>
+            <tag name="milosa_social_media_aggregator.handler" />
+        </service>
+    </services>
+</container>
