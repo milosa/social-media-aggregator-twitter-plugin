@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Milosa\SocialMediaAggregatorBundle\Twitter;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
-use Milosa\SocialMediaAggregatorBundle\Aggregator\Sites\Fetcher;
+use Milosa\SocialMediaAggregatorBundle\Aggregator\Fetcher;
 
 class TwitterFetcher extends Fetcher
 {

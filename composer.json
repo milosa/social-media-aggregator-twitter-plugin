@@ -31,7 +31,7 @@
   {
     "php": "^7.2",
     "abraham/twitteroauth": "^0.7.4",
-    "milosa/social-media-aggregator-bundle": "^0.0.6",
+    "milosa/social-media-aggregator-bundle": "dev-master",
     "symfony/config": "^4.1",
     "symfony/dependency-injection": "^4.1",
     "symfony/http-kernel": "^4.1",
