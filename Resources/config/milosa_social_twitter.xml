@@ -29,5 +29,9 @@
             <argument type="string">Milosa\SocialMediaAggregatorBundle\Twitter\TwitterMessageFactory</argument>
             <tag name="milosa_social_media_aggregator.handler" />
         </service>
+
+        <service id="twig.extension.date" class="Twig_Extensions_Extension_Date">
+            <tag name="twig.extension"/>
+        </service>
     </services>
 </container>
