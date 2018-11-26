@@ -44,9 +44,8 @@ class TwitterPluginTest extends TestCase
         $this->assertTrue($container->hasParameter('milosa_social_media_aggregator.twitter_account'));
         $this->assertTrue($container->hasParameter('milosa_social_media_aggregator.twitter_image_size'));
 
-        $this->assertTrue($container->hasDefinition('milosa_social_media_aggregator.fetcher.twitter'));
+        $this->assertTrue($container->hasDefinition('milosa_social_media_aggregator.fetcher.twitter.abstract'));
         $this->assertTrue($container->hasDefinition('milosa_social_media_aggregator.plugin.twitter'));
-        $this->assertTrue($container->hasDefinition('Abraham\TwitterOAuth\TwitterOAuth'));
         $this->assertTrue($container->hasDefinition('milosa_social_media_aggregator.handler.twitter'));
 
         $this->assertFalse($container->hasDefinition('milosa_social_media_aggregator.twitter_cache'));
@@ -57,7 +56,7 @@ class TwitterPluginTest extends TestCase
         $container = $this->createContainer(true);
 
         $this->assertTrue($container->hasDefinition('milosa_social_media_aggregator.twitter_cache'));
-        $this->assertTrue($container->getDefinition('milosa_social_media_aggregator.fetcher.twitter')->hasMethodCall('setCache'));
+        $this->assertTrue($container->getDefinition('milosa_social_media_aggregator.fetcher.twitter.abstract')->hasMethodCall('setCache'));
     }
 
     public function testAddConfiguration(): void
@@ -75,14 +74,10 @@ class TwitterPluginTest extends TestCase
                 'oauth_token' => null,
                 'oauth_token_secret' => null,
             ],
+            'sources' => [],
             'enable_cache' => false,
             'cache_lifetime' => 3600,
-            'number_of_tweets' => 10,
-            'account_to_fetch' => null,
             'template' => 'twitter.twig',
-            'show_images' => true,
-            'hashtag_links' => true,
-            'image_size' => 'thumb',
         ],
         $node->getDefaultValue());
     }
@@ -103,6 +98,14 @@ class TwitterPluginTest extends TestCase
                     'number_of_tweets' => 42,
                     'account_to_fetch' => 'NASA',
                     'image_size' => 'thumb',
+                    'sources' => [
+                        [
+                        'search_type' => 'profile',
+                        'search_term' => 'test',
+                        'number_of_tweets' => 2,
+                        'image_size' => 'thumb',
+                            ],
+                    ],
                 ],
             ],
         ];

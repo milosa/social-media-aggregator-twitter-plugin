@@ -11,7 +11,10 @@ Twitter plugin for [Milosa Social Media Aggregator Bundle](https://github.com/mi
 ## Usage
 
 Get Twitter API access here: https://developer.twitter.com/en/apply/user
- 
+You can add multiple search terms. Currently, these search types are supported:
+- profile
+- hashtag
+
 Add the following config to your configuration file:
 
 ### Sample config file
@@ -23,8 +26,15 @@ Add the following config to your configuration file:
                     consumer_secret: '%env(TWITTER_CONSUMER_SECRET)%'
                     oauth_token: '%env(TWITTER_OAUTH_TOKEN)%'
                     oauth_token_secret: '%env(TWITTER_OAUTH_TOKEN_SECRET)%'
+                sources:
+                    - search_term: FamilyGuyOnFox #This will use these defaults: search_type: profile, image_size: thumb and number_of_tweets: 10
+                    - search_type: hashtag
+                      search_term: Rotterdam
+                      number_of_tweets: 20
+                    - search_type: profile
+                      search_term: nasa
+                      number_of_tweets: 15
+                      image_size: thumb    
                 enable_cache: true
                 cache_lifetime: 3600
-                number_of_tweets: 20
-                account_to_fetch: FamilyGuyonFOX
                 template: twitter.twig

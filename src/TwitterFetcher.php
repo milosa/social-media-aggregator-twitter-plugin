@@ -4,36 +4,16 @@ declare(strict_types=1);
 
 namespace Milosa\SocialMediaAggregatorBundle\Twitter;
 
-use Abraham\TwitterOAuth\TwitterOAuth;
+use Milosa\SocialMediaAggregatorBundle\Aggregator\ClientWrapper;
 use Milosa\SocialMediaAggregatorBundle\Aggregator\Fetcher;
 
 class TwitterFetcher extends Fetcher
 {
     private const CACHE_KEY = 'twitter_messages';
-    /**
-     * @var TwitterOAuth
-     */
-    private $oauth;
-    /**
-     * @var string
-     */
-    private $fetchScreenName;
-    /**
-     * @var int
-     */
-    private $numberOfMessages;
 
-    /**
-     * @var string
-     */
-    private $imageSize;
-
-    public function __construct(TwitterOAuth $twitterOauth, string $fetchScreenName, int $numberOfMessages, string $imageSize)
+    public function __construct(ClientWrapper $client, array $config)
     {
-        $this->fetchScreenName = $fetchScreenName;
-        $this->numberOfMessages = $numberOfMessages;
-        $this->oauth = $twitterOauth;
-        $this->imageSize = $imageSize;
+        parent::__construct($client, $config);
     }
 
     /**
@@ -42,7 +22,7 @@ class TwitterFetcher extends Fetcher
     public function fetch(): array
     {
         if ($this->data === null) {
-            $this->data = $this->getTimeLine();
+            $this->data = $this->getTweets();
         }
 
         $result = [];
@@ -56,16 +36,16 @@ class TwitterFetcher extends Fetcher
     /**
      * @return object[]
      */
-    private function getTimeLine()
+    private function getTweets()
     {
         if ($this->cache === null) {
-            return $this->getTimeLineFromAPI();
+            return $this->getTweetsFromAPI();
         }
 
-        $cacheItem = $this->cache->getItem(self::CACHE_KEY);
+        $cacheItem = $this->cache->getItem(self::CACHE_KEY.'_'.$this->config['search_type'].'_'.$this->config['search_term']);
 
         if (!$cacheItem->isHit()) {
-            $messages = $this->getTimeLineFromAPI();
+            $messages = $this->getTweetsFromAPI();
             $cacheItem->set($messages);
             $this->cache->save($cacheItem);
         } else {
@@ -78,10 +58,16 @@ class TwitterFetcher extends Fetcher
     /**
      * @return object[]
      */
-    private function getTimeLineFromAPI(): array
+    private function getTweetsFromAPI(): array
     {
-        $this->oauth->get('statuses/user_timeline', ['screen_name' => $this->fetchScreenName, 'count' => $this->numberOfMessages, 'tweet_mode' => 'extended']);
+        if ($this->config['search_type'] === 'profile') {
+            $res = $this->client->get('statuses/user_timeline.json', ['screen_name' => $this->config['search_term'], 'count' => $this->config['number_of_tweets'], 'tweet_mode' => 'extended']);
 
-        return $this->injectSource($this->oauth->getLastBody(), 'API');
+            return $this->injectSource(json_decode($res->getBody()->getContents()), 'API');
+        }
+
+        $res = $this->client->get('search/tweets.json', ['q' => $this->config['search_term'], 'count' => $this->config['number_of_tweets'], 'tweet_mode' => 'extended', 'result_type' => 'recent']);
+
+        return $this->injectSource(json_decode($res->getBody()->getContents())->statuses, 'API');
     }
 }

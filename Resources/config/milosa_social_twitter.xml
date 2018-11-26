@@ -7,26 +7,32 @@
     <services>
         <defaults autowire="true" autoconfigure="true" public="false" />
 
-        <service id="milosa_social_media_aggregator.fetcher.twitter" class="Milosa\SocialMediaAggregatorBundle\Twitter\TwitterFetcher">
-            <argument type="service" id="Abraham\TwitterOAuth\TwitterOAuth"/>
-            <argument>%milosa_social_media_aggregator.twitter_account%</argument>
-            <argument>%milosa_social_media_aggregator.twitter_numtweets%</argument>
-            <argument>%milosa_social_media_aggregator.twitter_image_size%</argument>
-            <tag name="milosa_social_media_aggregator.fetcher" />
+        <!--<service id="milosa_social_media_aggregator.fetcher.twitter" class="Milosa\SocialMediaAggregatorBundle\Twitter\TwitterFetcher">-->
+            <!--<argument type="service" id="Abraham\TwitterOAuth\TwitterOAuth"/>-->
+            <!--<argument>%milosa_social_media_aggregator.twitter_account%</argument>-->
+            <!--<argument>%milosa_social_media_aggregator.twitter_numtweets%</argument>-->
+            <!--<argument>%milosa_social_media_aggregator.twitter_image_size%</argument>-->
+            <!--<tag name="milosa_social_media_aggregator.fetcher" />-->
+        <!--</service>-->
+
+        <service id="milosa_social_media_aggregator.client.twitter" class="Milosa\SocialMediaAggregatorBundle\Twitter\TwitterClient">
+            <argument type="collection">
+                <argument key="consumer_key">%milosa_social_media_aggregator.twitter_consumer_key%</argument>
+                <argument key="consumer_secret">%milosa_social_media_aggregator.twitter_consumer_secret%</argument>
+                <argument key="token">%milosa_social_media_aggregator.twitter_oauth_token%</argument>
+                <argument key="token_secret">%milosa_social_media_aggregator.twitter_oauth_token_secret%</argument>
+                <argument key="base_uri">https://api.twitter.com/1.1/</argument>
+            </argument>
+        </service>
+
+        <service id="milosa_social_media_aggregator.fetcher.twitter.abstract" abstract="true" class="Milosa\SocialMediaAggregatorBundle\Twitter\TwitterFetcher">
+            <argument type="service" id="milosa_social_media_aggregator.client.twitter"/>
         </service>
 
         <service id="milosa_social_media_aggregator.plugin.twitter" class="Milosa\SocialMediaAggregatorBundle\Twitter\TwitterPlugin" />
 
-        <service id="Abraham\TwitterOAuth\TwitterOAuth">
-            <argument>%milosa_social_media_aggregator.twitter_consumer_key%</argument>
-            <argument>%milosa_social_media_aggregator.twitter_consumer_secret%</argument>
-            <argument>%milosa_social_media_aggregator.twitter_oauth_token%</argument>
-            <argument>%milosa_social_media_aggregator.twitter_oauth_token_secret%</argument>
-        </service>
-
         <service id="milosa_social_media_aggregator.handler.twitter" class="Milosa\SocialMediaAggregatorBundle\Aggregator\Handler">
-            <argument type="service" id="milosa_social_media_aggregator.fetcher.twitter" />
-            <argument type="string">Milosa\SocialMediaAggregatorBundle\Twitter\TwitterMessageFactory</argument>
+            <argument index="1" type="string">Milosa\SocialMediaAggregatorBundle\Twitter\TwitterMessageFactory</argument>
             <tag name="milosa_social_media_aggregator.handler" />
         </service>
 

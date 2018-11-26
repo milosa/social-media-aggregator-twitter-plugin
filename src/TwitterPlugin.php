@@ -8,6 +8,7 @@ use Milosa\SocialMediaAggregatorBundle\MilosaSocialMediaAggregatorPlugin;
 use Milosa\SocialMediaAggregatorBundle\Twitter\DependencyInjection\TwitterPluginExtension;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -33,6 +34,31 @@ class TwitterPlugin extends Bundle implements MilosaSocialMediaAggregatorPlugin
         $this->setContainerParameters($config, $container);
         $this->configureCaching($config, $container);
         $this->registerHandler($container);
+        $this->addFetchers($config, $container);
+    }
+
+    private function addFetchers(array $config, ContainerBuilder $container): void
+    {
+        $handlerDefinition = $container->findDefinition('milosa_social_media_aggregator.handler.twitter');
+        $fetchers = [];
+
+        foreach ($config['plugins']['twitter']['sources'] as $source) {
+            $fetcher = new ChildDefinition('milosa_social_media_aggregator.fetcher.twitter.abstract');
+
+            $fetcherSettings = [
+                'search_term' => $source['search_term'],
+                'number_of_tweets' => $source['number_of_tweets'],
+                'image_size' => $source['image_size'],
+                'search_type' => $source['search_type'],
+            ];
+
+            $fetcher->setArgument(1, $fetcherSettings);
+            $container->setDefinition('milosa_social_media_aggregator.fetcher.twitter.'.$source['search_term'], $fetcher);
+
+            $fetchers[] = $fetcher;
+        }
+
+        $handlerDefinition->setArgument(0, $fetchers);
     }
 
     public function addConfiguration(ArrayNodeDefinition $pluginNode): void
@@ -49,15 +75,22 @@ class TwitterPlugin extends Bundle implements MilosaSocialMediaAggregatorPlugin
                         ->scalarNode('oauth_token')->defaultNull()->end()
                         ->scalarNode('oauth_token_secret')->defaultNull()->end()
                     ->end()
-                ->end() //auth data
+                ->end()
+                ->arrayNode('sources')
+                    ->isRequired()
+                    ->requiresAtLeastOneElement()
+                    ->arrayPrototype()
+                        ->children()
+                            ->enumNode('search_type')->values(['profile', 'hashtag'])->defaultValue('profile')->end()
+                            ->scalarNode('search_term')->isRequired()->end()
+                            ->integerNode('number_of_tweets')->defaultValue(10)->end()
+                            ->enumNode('image_size')->values(['thumb', 'large', 'medium', 'small'])->defaultValue('thumb')->end()
+                        ->end()
+                    ->end()
+                ->end()
                 ->booleanNode('enable_cache')->defaultValue(false)->end()
                 ->integerNode('cache_lifetime')->info('Cache lifetime in seconds')->defaultValue(3600)->end()
-                ->integerNode('number_of_tweets')->defaultValue(10)->end()
-                ->scalarNode('account_to_fetch')->isRequired()->defaultNull()->info('Screen name of the account you want to fetch the timeline of.')->end()
                 ->scalarNode('template')->defaultValue('twitter.twig')->end()
-                ->booleanNode('show_images')->defaultTrue()->end()
-                ->booleanNode('hashtag_links')->defaultTrue()->end()
-                ->enumNode('image_size')->values(['thumb', 'large', 'medium', 'small'])->defaultValue('thumb')->end()
             ->end();
     }
 
@@ -89,7 +122,7 @@ class TwitterPlugin extends Bundle implements MilosaSocialMediaAggregatorPlugin
             ]);
 
             $container->setDefinition('milosa_social_media_aggregator.twitter_cache', $cacheDefinition)->addTag('cache.pool');
-            $fetcherDefinition = $container->getDefinition('milosa_social_media_aggregator.fetcher.twitter');
+            $fetcherDefinition = $container->getDefinition('milosa_social_media_aggregator.fetcher.twitter.abstract');
             $fetcherDefinition->addMethodCall('setCache', [new Reference('milosa_social_media_aggregator.twitter_cache')]);
         }
     }
