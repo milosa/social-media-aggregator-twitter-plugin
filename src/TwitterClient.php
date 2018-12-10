@@ -35,8 +35,6 @@ class TwitterClient implements ClientWrapper
 
     public function get(string $uri, array $queryParameters = []): ResponseInterface
     {
-        $res = $this->client->get($uri, ['query' => $queryParameters]);
-
-        return $res;
+        return $this->client->get($uri, ['query' => $queryParameters]);
     }
 }

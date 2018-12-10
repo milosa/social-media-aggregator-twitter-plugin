@@ -22,9 +22,9 @@ class TwitterPlugin extends Bundle implements MilosaSocialMediaAggregatorPlugin
         return 'twitter';
     }
 
-    public function getTwigPath(): string
+    public function getResourcesPath(): string
     {
-        return realpath(__DIR__.'/../Resources/views');
+        return realpath(__DIR__.'/../Resources');
     }
 
     public function load(array $config, ContainerBuilder $container): void
@@ -39,7 +39,7 @@ class TwitterPlugin extends Bundle implements MilosaSocialMediaAggregatorPlugin
 
     private function addFetchers(array $config, ContainerBuilder $container): void
     {
-        $handlerDefinition = $container->findDefinition('milosa_social_media_aggregator.handler.twitter');
+
         $fetchers = [];
 
         foreach ($config['plugins']['twitter']['sources'] as $source) {
@@ -58,6 +58,7 @@ class TwitterPlugin extends Bundle implements MilosaSocialMediaAggregatorPlugin
             $fetchers[] = $fetcher;
         }
 
+        $handlerDefinition = $container->findDefinition('milosa_social_media_aggregator.handler.twitter');
         $handlerDefinition->setArgument(0, $fetchers);
     }
 
@@ -100,9 +101,6 @@ class TwitterPlugin extends Bundle implements MilosaSocialMediaAggregatorPlugin
         $container->setParameter('milosa_social_media_aggregator.twitter_consumer_secret', $config['plugins']['twitter']['auth_data']['consumer_secret']);
         $container->setParameter('milosa_social_media_aggregator.twitter_oauth_token', $config['plugins']['twitter']['auth_data']['oauth_token']);
         $container->setParameter('milosa_social_media_aggregator.twitter_oauth_token_secret', $config['plugins']['twitter']['auth_data']['oauth_token_secret']);
-        $container->setParameter('milosa_social_media_aggregator.twitter_numtweets', $config['plugins']['twitter']['number_of_tweets']);
-        $container->setParameter('milosa_social_media_aggregator.twitter_account', $config['plugins']['twitter']['account_to_fetch']);
-        $container->setParameter('milosa_social_media_aggregator.twitter_image_size', $config['plugins']['twitter']['image_size']);
     }
 
     /**

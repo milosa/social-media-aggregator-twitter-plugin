@@ -7,14 +7,6 @@
     <services>
         <defaults autowire="true" autoconfigure="true" public="false" />
 
-        <!--<service id="milosa_social_media_aggregator.fetcher.twitter" class="Milosa\SocialMediaAggregatorBundle\Twitter\TwitterFetcher">-->
-            <!--<argument type="service" id="Abraham\TwitterOAuth\TwitterOAuth"/>-->
-            <!--<argument>%milosa_social_media_aggregator.twitter_account%</argument>-->
-            <!--<argument>%milosa_social_media_aggregator.twitter_numtweets%</argument>-->
-            <!--<argument>%milosa_social_media_aggregator.twitter_image_size%</argument>-->
-            <!--<tag name="milosa_social_media_aggregator.fetcher" />-->
-        <!--</service>-->
-
         <service id="milosa_social_media_aggregator.client.twitter" class="Milosa\SocialMediaAggregatorBundle\Twitter\TwitterClient">
             <argument type="collection">
                 <argument key="consumer_key">%milosa_social_media_aggregator.twitter_consumer_key%</argument>

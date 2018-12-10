@@ -28,9 +28,9 @@ class TwitterPluginTest extends TestCase
         $this->assertEquals('twitter', $this->plugin->getPluginName());
     }
 
-    public function testGetTwigPath(): void
+    public function testGetResourcesPath(): void
     {
-        $this->assertEquals(DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'views', mb_substr($this->plugin->getTwigPath(), -16));
+        $this->assertEquals(DIRECTORY_SEPARATOR.'Resources', mb_substr($this->plugin->getResourcesPath(), -10));
     }
 
     public function testLoad(): void
@@ -41,8 +41,6 @@ class TwitterPluginTest extends TestCase
         $this->assertTrue($container->hasParameter('milosa_social_media_aggregator.twitter_consumer_secret'));
         $this->assertTrue($container->hasParameter('milosa_social_media_aggregator.twitter_oauth_token'));
         $this->assertTrue($container->hasParameter('milosa_social_media_aggregator.twitter_oauth_token_secret'));
-        $this->assertTrue($container->hasParameter('milosa_social_media_aggregator.twitter_account'));
-        $this->assertTrue($container->hasParameter('milosa_social_media_aggregator.twitter_image_size'));
 
         $this->assertTrue($container->hasDefinition('milosa_social_media_aggregator.fetcher.twitter.abstract'));
         $this->assertTrue($container->hasDefinition('milosa_social_media_aggregator.plugin.twitter'));
