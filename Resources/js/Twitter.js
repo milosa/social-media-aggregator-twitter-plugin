@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import moment from "moment";
 
-// const Twitter = (message) => {
 export default class Twitter extends Component
 {
     render() {
@@ -12,6 +11,7 @@ export default class Twitter extends Component
             <article className="card-body">
                 <a href={message.URL} rel="noopener noreferrer">
                     <h2 className="card-title"><img
+                        className="rounded-circle"
                         src={message.authorThumbnail.replace('_normal', '_mini')}/> {message.author}</h2>
                     <span className="author-name">@{message.screenName}</span>
                 </a>

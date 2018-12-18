@@ -39,7 +39,6 @@ class TwitterPlugin extends Bundle implements MilosaSocialMediaAggregatorPlugin
 
     private function addFetchers(array $config, ContainerBuilder $container): void
     {
-
         $fetchers = [];
 
         foreach ($config['plugins']['twitter']['sources'] as $source) {

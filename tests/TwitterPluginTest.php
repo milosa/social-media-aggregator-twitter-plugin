@@ -30,7 +30,7 @@ class TwitterPluginTest extends TestCase
 
     public function testGetResourcesPath(): void
     {
-        $this->assertEquals(DIRECTORY_SEPARATOR.'Resources', mb_substr($this->plugin->getResourcesPath(), -10));
+        $this->assertEquals(\DIRECTORY_SEPARATOR.'Resources', mb_substr($this->plugin->getResourcesPath(), -10));
     }
 
     public function testLoad(): void
