@@ -6,9 +6,8 @@ export default class Twitter extends Component
     render() {
         const { message } = this.props;
 
-        console.log('twitter');
         return (<li className="card mb-4 w-25">
-            <article className="card-body">
+            <article className="card-body tweet">
                 <a href={message.URL} rel="noopener noreferrer">
                     <h2 className="card-title"><img
                         className="rounded-circle"
