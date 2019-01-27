@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import moment from "moment";
+import '../../../scss/Components/twitter.scss';
 
 export default class Twitter extends Component
 {
