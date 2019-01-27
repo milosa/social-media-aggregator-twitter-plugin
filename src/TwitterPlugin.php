@@ -6,6 +6,7 @@ namespace Milosa\SocialMediaAggregatorBundle\Twitter;
 
 use Milosa\SocialMediaAggregatorBundle\MilosaSocialMediaAggregatorPlugin;
 use Milosa\SocialMediaAggregatorBundle\Twitter\DependencyInjection\TwitterPluginExtension;
+use function realpath;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -13,7 +14,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use function realpath;
 
 class TwitterPlugin extends Bundle implements MilosaSocialMediaAggregatorPlugin
 {
